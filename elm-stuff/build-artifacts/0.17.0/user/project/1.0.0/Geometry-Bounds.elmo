@@ -1,0 +1,11 @@
+var _user$project$Geometry_Bounds$Bounds = F2(
+	function (a, b) {
+		return {min: a, max: b};
+	});
+var _user$project$Geometry_Bounds$new = F2(
+	function (min, max) {
+		return A2(
+			_user$project$Geometry_Bounds$Bounds,
+			A2(_user$project$Geometry_Point$new, min.x, min.y),
+			A2(_user$project$Geometry_Point$new, max.x, max.y));
+	});

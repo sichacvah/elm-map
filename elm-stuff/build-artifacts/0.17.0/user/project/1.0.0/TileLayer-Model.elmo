@@ -1,0 +1,54 @@
+var _user$project$TileLayer_Model$floorFloat = function (x) {
+	return _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$Basics$floor(x));
+};
+var _user$project$TileLayer_Model$loadTiles = F4(
+	function (pixelBounds, origin, zoom, tileSize) {
+		var seTilePoint = A2(
+			_user$project$Geometry_Point$new,
+			_user$project$TileLayer_Model$floorFloat(pixelBounds.max.x / tileSize),
+			_user$project$TileLayer_Model$floorFloat(pixelBounds.max.y / tileSize));
+		var nwTilePoint = A2(
+			_user$project$Geometry_Point$new,
+			_user$project$TileLayer_Model$floorFloat(pixelBounds.min.x / tileSize),
+			_user$project$TileLayer_Model$floorFloat(pixelBounds.min.y / tileSize));
+		var xRange = A2(
+			_elm_lang$core$Debug$log,
+			'xRange',
+			_elm_lang$core$Native_List.range(nwTilePoint.x, seTilePoint.x));
+		var loadTile = function (y) {
+			return A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return A2(_user$project$Geometry_Point$new, x, y);
+				},
+				xRange);
+		};
+		var yRange = A2(
+			_elm_lang$core$Debug$log,
+			'yRange',
+			_elm_lang$core$Native_List.range(nwTilePoint.y, seTilePoint.y));
+		return _elm_lang$core$List$concat(
+			A2(_elm_lang$core$List$map, loadTile, yRange));
+	});
+var _user$project$TileLayer_Model$TileLayer = F6(
+	function (a, b, c, d, e, f) {
+		return {url: a, options: b, pixelBounds: c, origin: d, zoom: e, tiles: f};
+	});
+var _user$project$TileLayer_Model$Options = F4(
+	function (a, b, c, d) {
+		return {tileSize: a, minZoom: b, maxZoom: c, subdomains: d};
+	});
+var _user$project$TileLayer_Model$defaultOptions = A4(_user$project$TileLayer_Model$Options, 256, 0, 18, 'abc');
+var _user$project$TileLayer_Model$new = F5(
+	function (url, mbOpts, bounds, origin, zoom) {
+		var opts = A2(_elm_lang$core$Maybe$withDefault, _user$project$TileLayer_Model$defaultOptions, mbOpts);
+		return A6(
+			_user$project$TileLayer_Model$TileLayer,
+			url,
+			opts,
+			bounds,
+			origin,
+			zoom,
+			A4(_user$project$TileLayer_Model$loadTiles, bounds, origin, zoom, opts.tileSize));
+	});

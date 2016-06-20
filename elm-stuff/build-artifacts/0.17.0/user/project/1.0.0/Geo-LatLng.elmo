@@ -1,0 +1,40 @@
+var _user$project$Geo_LatLng$margin = 1.0e-9;
+var _user$project$Geo_LatLng$radToDeg = function (rad) {
+	return (180 / _elm_lang$core$Basics$pi) * rad;
+};
+var _user$project$Geo_LatLng$degToRad = function (deg) {
+	return (_elm_lang$core$Basics$pi / 180) * deg;
+};
+var _user$project$Geo_LatLng$equals = F2(
+	function (one, two) {
+		var m = A2(
+			_elm_lang$core$Basics$max,
+			_elm_lang$core$Basics$abs(one.lat - two.lat),
+			_elm_lang$core$Basics$abs(one.lng - two.lng));
+		return _elm_lang$core$Native_Utils.cmp(m, _user$project$Geo_LatLng$margin) < 1;
+	});
+var _user$project$Geo_LatLng$wrapLng = function (lng) {
+	var roundedLng = A2(
+		_elm_lang$core$Basics_ops['%'],
+		_elm_lang$core$Basics$round(lng) + 180,
+		360);
+	var wrapped = (_elm_lang$core$Native_Utils.cmp(lng, -180) < 0) ? 180 : -180;
+	return _elm_lang$core$Basics$toFloat(roundedLng + wrapped);
+};
+var _user$project$Geo_LatLng$clampLat = function (lat) {
+	return A2(
+		_elm_lang$core$Basics$max,
+		A2(_elm_lang$core$Basics$min, lat, 90),
+		-90);
+};
+var _user$project$Geo_LatLng$LatLng = F2(
+	function (a, b) {
+		return {lat: a, lng: b};
+	});
+var _user$project$Geo_LatLng$new = F2(
+	function (lat, lng) {
+		return A2(
+			_user$project$Geo_LatLng$LatLng,
+			_user$project$Geo_LatLng$clampLat(lat),
+			_user$project$Geo_LatLng$wrapLng(lng));
+	});

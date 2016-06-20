@@ -1,0 +1,28 @@
+var _user$project$Geometry_Transformation$untransform = F3(
+	function (_p0, point, mbScale) {
+		var _p1 = _p0;
+		var scale = A2(_elm_lang$core$Maybe$withDefault, 1, mbScale);
+		return A2(_user$project$Geometry_Point$new, ((point.x - _p1.b) / _p1.a) / scale, ((point.y - _p1.d) / _p1.c) / scale);
+	});
+var _user$project$Geometry_Transformation$transform = F3(
+	function (_p2, point, mbScale) {
+		var _p3 = _p2;
+		var scale = A2(_elm_lang$core$Maybe$withDefault, 1, mbScale);
+		return A2(_user$project$Geometry_Point$new, scale * ((_p3.a * point.x) + _p3.b), scale * ((_p3.c * point.y) + _p3.d));
+	});
+var _user$project$Geometry_Transformation$TransformationBase = F4(
+	function (a, b, c, d) {
+		return {a: a, b: b, c: c, d: d};
+	});
+var _user$project$Geometry_Transformation$Transformation = F2(
+	function (a, b) {
+		return {transform: a, untransform: b};
+	});
+var _user$project$Geometry_Transformation$new = F4(
+	function (a, b, c, d) {
+		var tb = A4(_user$project$Geometry_Transformation$TransformationBase, a, b, c, d);
+		return A2(
+			_user$project$Geometry_Transformation$Transformation,
+			_user$project$Geometry_Transformation$transform(tb),
+			_user$project$Geometry_Transformation$untransform(tb));
+	});

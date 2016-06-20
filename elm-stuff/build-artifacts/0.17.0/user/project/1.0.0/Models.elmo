@@ -1,0 +1,86 @@
+var _user$project$Models$project = F3(
+	function (model, coord, zoom) {
+		var scale = model.scaling(zoom);
+		var projectedPoint = model.projection.project(coord);
+		return A2(
+			_elm_lang$core$Debug$log,
+			'PROJECTED Point',
+			A2(
+				model.transformation.transform,
+				projectedPoint,
+				_elm_lang$core$Maybe$Just(scale)));
+	});
+var _user$project$Models$getTopLeftPoint = function (model) {
+	return A2(
+		_elm_lang$core$Debug$log,
+		'TOP LEFT POINT',
+		A2(
+			_user$project$Geometry_Point$subtract,
+			A3(_user$project$Models$project, model, model.center, model.zoom),
+			A2(_user$project$Geometry_Point$divideBy, model.size, 2)));
+};
+var _user$project$Models$getPixelOrigin = function (model) {
+	return A2(
+		_elm_lang$core$Debug$log,
+		' PIXEL ORIGIN',
+		_user$project$Models$getTopLeftPoint(model));
+};
+var _user$project$Models$getPixelBounds = function (model) {
+	var topLeftPoint = _user$project$Models$getTopLeftPoint(model);
+	return A2(
+		_elm_lang$core$Debug$log,
+		' PIXEL BOUNDS ',
+		A2(
+			_user$project$Geometry_Bounds$new,
+			topLeftPoint,
+			A2(_user$project$Geometry_Point$add, topLeftPoint, model.size)));
+};
+var _user$project$Models$Model = F9(
+	function (a, b, c, d, e, f, g, h, i) {
+		return {projection: a, transformation: b, scaling: c, center: d, zoom: e, layers: f, position: g, size: h, url: i};
+	});
+var _user$project$Models$init = F2(
+	function (width, height) {
+		return A9(
+			_user$project$Models$Model,
+			_user$project$Geo_Projection$mercator,
+			A4(_user$project$Geometry_Transformation$new, 0.5 / _elm_lang$core$Basics$pi, 0.5, -0.5 / _elm_lang$core$Basics$pi, 0.5),
+			function (zoom) {
+				return _elm_lang$core$Basics$toFloat(
+					256 * A2(
+						_elm_lang$core$Bitwise$shiftLeft,
+						1,
+						_elm_lang$core$Basics$round(zoom)));
+			},
+			A2(
+				_elm_lang$core$Debug$log,
+				'LatLng ',
+				A2(_user$project$Geo_LatLng$new, 69, 0)),
+			5,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			A2(_user$project$Geometry_Point$new, 0, 0),
+			A2(_user$project$Geometry_Point$new, width, height),
+			'http://{s}.tile.osm.org/{z}/{x}/{y}.png');
+	});
+var _user$project$Models$new = F2(
+	function (width, height) {
+		var initialModel = A2(_user$project$Models$init, width, height);
+		return A2(
+			_elm_lang$core$Debug$log,
+			'MODEL ',
+			_elm_lang$core$Native_Utils.update(
+				initialModel,
+				{
+					layers: _elm_lang$core$Native_List.fromArray(
+						[
+							A5(
+							_user$project$TileLayer_Model$new,
+							initialModel.url,
+							_elm_lang$core$Maybe$Nothing,
+							_user$project$Models$getPixelBounds(initialModel),
+							_user$project$Models$getPixelOrigin(initialModel),
+							initialModel.zoom)
+						])
+				}));
+	});

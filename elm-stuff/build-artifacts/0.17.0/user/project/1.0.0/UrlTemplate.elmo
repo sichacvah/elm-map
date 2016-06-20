@@ -1,0 +1,79 @@
+var _user$project$UrlTemplate$replaceStr = F2(
+	function (data, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1.match;
+		var _p2 = _p1.submatches;
+		if (_p2.ctor === '[]') {
+			return _p4;
+		} else {
+			var _p3 = _p2._0;
+			if (_p3.ctor === 'Nothing') {
+				return _p4;
+			} else {
+				return A2(
+					_elm_lang$core$Maybe$withDefault,
+					_p4,
+					A2(_elm_lang$core$Dict$get, _p3._0, data));
+			}
+		}
+	});
+var _user$project$UrlTemplate$template = F2(
+	function (url, data) {
+		var templateRe = _elm_lang$core$Regex$regex('\\{ *([\\w_\\-]+) *\\}');
+		return A4(
+			_elm_lang$core$Regex$replace,
+			_elm_lang$core$Regex$All,
+			templateRe,
+			_user$project$UrlTemplate$replaceStr(data),
+			url);
+	});
+var _user$project$UrlTemplate$getTileSubdomain = F3(
+	function (subdomains, x, y) {
+		var subdomains$ = _elm_lang$core$String$toList(subdomains);
+		var index = A2(
+			_elm_lang$core$Basics_ops['%'],
+			_elm_lang$core$Basics$round(x + y),
+			_elm_lang$core$List$length(subdomains$));
+		var subList = A2(_elm_lang$core$List$drop, index, subdomains$);
+		var _p5 = subList;
+		if (_p5.ctor === '[]') {
+			return 'a';
+		} else {
+			return _elm_lang$core$String$fromList(
+				_elm_lang$core$Native_List.fromArray(
+					[_p5._0]));
+		}
+	});
+var _user$project$UrlTemplate$getTileUrl = F4(
+	function (_p6, z, s, url) {
+		var _p7 = _p6;
+		var _p9 = _p7.y;
+		var _p8 = _p7.x;
+		var data = _elm_lang$core$Dict$fromList(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{
+					ctor: '_Tuple2',
+					_0: 's',
+					_1: A3(_user$project$UrlTemplate$getTileSubdomain, s, _p8, _p9)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'x',
+					_1: _elm_lang$core$Basics$toString(
+						_elm_lang$core$Basics$abs(_p8))
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'y',
+					_1: _elm_lang$core$Basics$toString(
+						_elm_lang$core$Basics$abs(_p9))
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'z',
+					_1: _elm_lang$core$Basics$toString(z)
+				}
+				]));
+		return A2(_user$project$UrlTemplate$template, url, data);
+	});

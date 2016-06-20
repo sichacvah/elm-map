@@ -1,0 +1,87 @@
+var _user$project$TileLayer_View$tileImage = F3(
+	function (url, tileLayer, tilePoint) {
+		var y = tilePoint.y;
+		var zoom = tileLayer.zoom;
+		var tileLimit = A2(
+			_elm_lang$core$Bitwise$shiftLeft,
+			1,
+			_elm_lang$core$Basics$floor(zoom));
+		var x = _elm_lang$core$Basics$toFloat(
+			A2(
+				_elm_lang$core$Basics_ops['%'],
+				A2(
+					_elm_lang$core$Basics_ops['%'],
+					_elm_lang$core$Basics$round(tilePoint.x),
+					tileLimit) + tileLimit,
+				tileLimit));
+		var tileSize = tileLayer.options.tileSize;
+		var origin = tileLayer.origin;
+		var tilePos = A2(
+			_user$project$Geometry_Point$subtract,
+			A2(_user$project$Geometry_Point$multipleBy, tilePoint, tileSize),
+			origin);
+		return A2(
+			_elm_lang$html$Html$img,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$style(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{
+							ctor: '_Tuple2',
+							_0: 'left',
+							_1: A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(tilePos.x),
+								'px')
+						},
+							{
+							ctor: '_Tuple2',
+							_0: 'top',
+							_1: A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(tilePos.y),
+								'px')
+						},
+							{ctor: '_Tuple2', _0: 'position', _1: 'absolute'}
+						])),
+					_elm_lang$html$Html_Attributes$src(
+					A4(
+						_user$project$UrlTemplate$getTileUrl,
+						A2(_user$project$Geometry_Point$new, x, y),
+						zoom,
+						'abc',
+						url))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$TileLayer_View$floorFloat = function (x) {
+	return _elm_lang$core$Basics$toFloat(
+		_elm_lang$core$Basics$floor(x));
+};
+var _user$project$TileLayer_View$view = F2(
+	function (url, tileLayer) {
+		var tileLimit = _elm_lang$core$Basics$toFloat(
+			A2(
+				_elm_lang$core$Bitwise$shiftLeft,
+				1,
+				_elm_lang$core$Basics$round(tileLayer.zoom)));
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html_Attributes$class('map-layer')
+				]),
+			A2(
+				_elm_lang$core$List$map,
+				A2(_user$project$TileLayer_View$tileImage, url, tileLayer),
+				A2(
+					_elm_lang$core$List$filter,
+					function (_p0) {
+						var _p1 = _p0;
+						var _p2 = _p1.y;
+						return (_elm_lang$core$Native_Utils.cmp(_p2, 0) > -1) && (_elm_lang$core$Native_Utils.cmp(_p2, tileLimit) < 0);
+					},
+					tileLayer.tiles)));
+	});

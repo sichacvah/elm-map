@@ -1,0 +1,29 @@
+var _user$project$Geo_Projection$unproject = function (point) {
+	var lat = _user$project$Geo_LatLng$radToDeg(
+		(2 * _elm_lang$core$Basics$atan(
+			Math.pow(_elm_lang$core$Basics$e, point.y))) - (_elm_lang$core$Basics$pi / 2));
+	var lng = _user$project$Geo_LatLng$radToDeg(point.x);
+	return A2(_user$project$Geo_LatLng$new, lat, lng);
+};
+var _user$project$Geo_Projection$maxLat = function () {
+	var a = Math.pow(_elm_lang$core$Basics$e, 2 * _elm_lang$core$Basics$pi);
+	return _user$project$Geo_LatLng$radToDeg(
+		_elm_lang$core$Basics$asin(a - 1) / (a + 1));
+}();
+var _user$project$Geo_Projection$project = function (latlng) {
+	var x = _user$project$Geo_LatLng$degToRad(latlng.lng);
+	var lat = A2(
+		_elm_lang$core$Basics$max,
+		A2(_elm_lang$core$Basics$min, _user$project$Geo_Projection$maxLat, latlng.lat),
+		0 - _user$project$Geo_Projection$maxLat);
+	var y = _user$project$Geo_LatLng$degToRad(lat);
+	return A2(
+		_user$project$Geometry_Point$new,
+		x,
+		A2(_elm_lang$core$Basics$logBase, _elm_lang$core$Basics$e, (_elm_lang$core$Basics$pi / 4) + (y / 2)));
+};
+var _user$project$Geo_Projection$Projection = F2(
+	function (a, b) {
+		return {project: a, unproject: b};
+	});
+var _user$project$Geo_Projection$mercator = A2(_user$project$Geo_Projection$Projection, _user$project$Geo_Projection$project, _user$project$Geo_Projection$unproject);
